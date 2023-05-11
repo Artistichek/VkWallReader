@@ -28,9 +28,11 @@ public class ReaderService : IReaderService
             result.Domain = domain;
             return result;
         }
-        
 
-        _logger.LogError("Cannot get data from requested page");
+        var errorCode = json.SelectToken("error").SelectToken("error_code");
+        var errorMessage = json.SelectToken("error").SelectToken("error_msg");
+
+        _logger.LogError($"Cannot get data from requested page. Error code: {errorCode}; Error message: {errorMessage}");
         throw new BadRequestException(json.ToString());
     }
 }
